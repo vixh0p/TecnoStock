@@ -1,0 +1,67 @@
+/* ==============================
+   TecnoStock - Estilos personalizados
+   Complementa Bootstrap 5
+   ============================== */
+
+body {
+    background-color: #f4f6f9;
+}
+
+/* Tarjetas del panel */
+.card-stat {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    transition: transform 0.15s ease;
+}
+
+.card-stat:hover {
+    transform: translateY(-2px);
+}
+
+/* Badges de estado */
+.badge-stock-bajo {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.badge-stock-ok {
+    background-color: #198754;
+    color: #fff;
+}
+
+.badge-activo {
+    background-color: #198754;
+    color: #fff;
+}
+
+.badge-inactivo {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+/* Tabla responsiva */
+.table thead th {
+    background-color: #343a40;
+    color: #fff;
+    border: none;
+}
+
+/* Login */
+.login-card {
+    max-width: 400px;
+    margin: 0 auto;
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Alerta de stock bajo */
+.stock-alerta {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}

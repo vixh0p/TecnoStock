@@ -1,0 +1,14 @@
+# Configuración local
+/config/database.local.php
+
+# Archivos temporales
+*.tmp
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Sistema operativo
+Thumbs.db
+.DS_Store
