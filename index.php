@@ -3,6 +3,7 @@
  * Punto de entrada: redirige al dashboard si hay sesión, si no al login.
  */
 require_once __DIR__ . '/includes/auth.php';
+require_once __DIR__ . '/includes/functions.php';
 iniciarSesion();
 
 if (isset($_SESSION['usuario_id'])) {
