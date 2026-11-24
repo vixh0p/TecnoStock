@@ -88,8 +88,10 @@ CREATE INDEX idx_mov_fecha          ON movimiento(fecha_hora);
 -- Datos iniciales (seed)
 -- =====================================================================
 
--- IMPORTANTE: El usuario administrador se crea con el script database/seed.php
+-- IMPORTANTE: El hash de la clave se actualiza con database/seed.php
 -- que genera el hash bcrypt correcto. Ejecutar ese script una vez tras importar este SQL.
+INSERT INTO usuario (nombre, correo, clave, estado) VALUES
+('Encargado Inventario', 'admin@tecnostock.cl', 'placeholder_hash_to_be_updated', 1);
 
 -- Categorías
 INSERT INTO categoria (nombre, descripcion, estado) VALUES
