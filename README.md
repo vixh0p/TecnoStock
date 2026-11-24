@@ -7,11 +7,47 @@ con alertas de stock bajo. Desarrollado con PHP 8 + PDO, MySQL y Bootstrap 5.
 ## Tabla de contenidos
 1. [Requisitos](#requisitos)
 2. [Instalación](#instalación)
-3. [Estructura del proyecto](#estructura-del-proyecto)
-4. [Entidades y modelo de datos](#entidades-y-modelo-de-datos)
-5. [Reglas de negocio](#reglas-de-negocio)
-6. [Credenciales de prueba](#credenciales-de-prueba)
-7. [Casos de prueba](#casos-de-prueba)
+3. [Actor y alcance](#actor-y-alcance)
+4. [Estructura del proyecto](#estructura-del-proyecto)
+5. [Entidades y modelo de datos](#entidades-y-modelo-de-datos)
+6. [Reglas de negocio](#reglas-de-negocio)
+7. [Credenciales de prueba](#credenciales-de-prueba)
+8. [Casos de prueba](#casos-de-prueba)
+
+---
+
+## Actor y alcance
+
+**Actor del sistema: Encargado de inventario**
+
+Es el único usuario del sistema. Sus responsabilidades son:
+
+- Administrar productos: registrar, consultar, buscar, editar y desactivar.
+- Administrar categorías: crear y editar.
+- Controlar existencias: registrar entradas y salidas de stock.
+- Monitorear alertas de stock bajo.
+
+**Alcance del sistema:**
+
+El sistema gestiona el catálogo de productos y sus movimientos de inventario (entradas y salidas). No incluye módulos de ventas, facturación, ni reportes avanzados. Está diseñado para funcionar en un servidor local (XAMPP) y ser operado por un usuario no técnico.
+
+**Trazabilidad con el caso:**
+
+| Requerimiento del caso | Implementación | Evidencia |
+|---|---|---|
+| Iniciar sesión | `login.php` con sesiones y hash bcrypt | Funcional, probado |
+| Registrar productos | `productos/crear.php` | Formulario con validaciones JS+PHP |
+| Consultar listado | `productos/index.php` | Tabla responsiva con paginación |
+| Buscar productos | `productos/index.php` (LIKE) | Búsqueda por nombre, código, categoría |
+| Modificar productos | `productos/editar.php` | Edición de precio, descripción, categoría, stock |
+| Desactivar productos | `productos/desactivar.php` | Soft delete (estado = 0, no elimina) |
+| Registrar entradas/salidas | `movimientos/registrar.php` | Transacción PDO con commit/rollback |
+| Alerta stock bajo | `dashboard.php` + badges | Visible en panel y listado |
+| Código único | UNIQUE en SQL + validación PHP | Restricción en BD y servidor |
+| Stock no negativo | CHECK en SQL + validación PHP | Restricción en BD y servidor |
+| Salida no deja stock < 0 | Validación PHP antes de transacción | Bloquea si cantidad > stock_actual |
+| Desactivar no elimina | UPDATE estado, no DELETE | Producto queda en BD como inactivo |
+| Stock se actualiza solo | UPDATE automático en transacción | Tras cada movimiento válido |
 
 ---
 

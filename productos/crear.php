@@ -91,17 +91,14 @@ include __DIR__ . '/../includes/header.php';
             <div class="row g-3">
                 <div class="col-md-3">
                     <label for="codigo" class="form-label">Código <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control <?= isset($errores['codigo']) ? 'is-invalid' : '' ?>"
-                           id="codigo" name="codigo" value="<?= e($_POST['codigo'] ?? '') ?>"
-                           placeholder="Ej: CB-USB-003" required>
+                    <input type="text" class="form-control <?= isset($errores['codigo']) ? 'is-invalid' : '' ?>" id="codigo" name="codigo" value="<?= e($_POST['codigo'] ?? '') ?>" placeholder="Ej: CB-USB-003" required>
                     <?php if (isset($errores['codigo'])): ?>
                     <div class="invalid-feedback"><?= e($errores['codigo']) ?></div>
                     <?php endif; ?>
                 </div>
                 <div class="col-md-5">
                     <label for="nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control <?= isset($errores['nombre']) ? 'is-invalid' : '' ?>"
-                           id="nombre" name="nombre" value="<?= e($_POST['nombre'] ?? '') ?>" required>
+                    <input type="text" class="form-control <?= isset($errores['nombre']) ? 'is-invalid' : '' ?>" id="nombre" name="nombre" value="<?= e($_POST['nombre'] ?? '') ?>" required>
                     <?php if (isset($errores['nombre'])): ?>
                     <div class="invalid-feedback"><?= e($errores['nombre']) ?></div>
                     <?php endif; ?>
@@ -129,8 +126,7 @@ include __DIR__ . '/../includes/header.php';
                 </div>
                 <div class="col-md-4">
                     <label for="precio" class="form-label">Precio ($) <span class="text-danger">*</span></label>
-                    <input type="number" step="0.01" min="0" class="form-control <?= isset($errores['precio']) ? 'is-invalid' : '' ?>"
-                           id="precio" name="precio" value="<?= e($_POST['precio'] ?? '') ?>" required>
+                    <input type="number" step="0.01" min="0" class="form-control <?= isset($errores['precio']) ? 'is-invalid' : '' ?>" id="precio" name="precio" value="<?= e($_POST['precio'] ?? '') ?>" placeholder="0.00" required>
                            placeholder="0.00">
                     <?php if (isset($errores['precio'])): ?>
                     <div class="invalid-feedback"><?= e($errores['precio']) ?></div>
@@ -138,16 +134,14 @@ include __DIR__ . '/../includes/header.php';
                 </div>
                 <div class="col-md-4">
                     <label for="stock_actual" class="form-label">Stock actual <span class="text-danger">*</span></label>
-                    <input type="number" min="0" class="form-control <?= isset($errores['stock_actual']) ? 'is-invalid' : '' ?>"
-                           id="stock_actual" name="stock_actual" value="<?= e($_POST['stock_actual'] ?? '0') ?>" required>
+                    <input type="number" min="0" class="form-control <?= isset($errores['stock_actual']) ? 'is-invalid' : '' ?>" id="stock_actual" name="stock_actual" value="<?= e($_POST['stock_actual'] ?? '0') ?>" required>
                     <?php if (isset($errores['stock_actual'])): ?>
                     <div class="invalid-feedback"><?= e($errores['stock_actual']) ?></div>
                     <?php endif; ?>
                 </div>
                 <div class="col-md-4">
                     <label for="stock_minimo" class="form-label">Stock mínimo <span class="text-danger">*</span></label>
-                    <input type="number" min="0" class="form-control <?= isset($errores['stock_minimo']) ? 'is-invalid' : '' ?>"
-                           id="stock_minimo" name="stock_minimo" value="<?= e($_POST['stock_minimo'] ?? '0') ?>" required>
+                    <input type="number" min="0" class="form-control <?= isset($errores['stock_minimo']) ? 'is-invalid' : '' ?>" id="stock_minimo" name="stock_minimo" value="<?= e($_POST['stock_minimo'] ?? '0') ?>" required>
                     <?php if (isset($errores['stock_minimo'])): ?>
                     <div class="invalid-feedback"><?= e($errores['stock_minimo']) ?></div>
                     <?php endif; ?>

@@ -88,10 +88,10 @@ CREATE INDEX idx_mov_fecha          ON movimiento(fecha_hora);
 -- Datos iniciales (seed)
 -- =====================================================================
 
--- IMPORTANTE: El hash de la clave se actualiza con database/seed.php
--- que genera el hash bcrypt correcto. Ejecutar ese script una vez tras importar este SQL.
+-- IMPORTANTE: Este hash bcrypt corresponde a la clave admin123.
+-- La base queda operativa solo importando este archivo SQL (no necesita seed.php).
 INSERT INTO usuario (nombre, correo, clave, estado) VALUES
-('Encargado Inventario', 'admin@tecnostock.cl', 'placeholder_hash_to_be_updated', 1);
+('Encargado Inventario', 'admin@tecnostock.cl', '$2y$10$3EMQgUojW.Aq4LkFKVuAhe.ERCywAZUD/PF.wx.akarukaEE3c8pm', 1);
 
 -- Categorías
 INSERT INTO categoria (nombre, descripcion, estado) VALUES

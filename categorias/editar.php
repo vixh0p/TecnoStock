@@ -79,9 +79,7 @@ include __DIR__ . '/../includes/header.php';
         <form id="formCategoria" method="POST" novalidate>
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
-                <input type="text" class="form-control <?= isset($errores['nombre']) ? 'is-invalid' : '' ?>"
-                       id="nombre" name="nombre"
-                       value="<?= e($_POST['nombre'] ?? $categoria['nombre']) ?>" required>
+                <input type="text" class="form-control <?= isset($errores['nombre']) ? 'is-invalid' : '' ?>" id="nombre" name="nombre" value="<?= e($_POST['nombre'] ?? $categoria['nombre']) ?>" placeholder="Ej: Cables y Adaptadores" required>
                        placeholder="Ej: Cables y Adaptadores">
                 <?php if (isset($errores['nombre'])): ?>
                 <div class="invalid-feedback"><?= e($errores['nombre']) ?></div>
@@ -93,8 +91,7 @@ include __DIR__ . '/../includes/header.php';
                           placeholder="Descripción de la categoría..."><?= e($_POST['descripcion'] ?? $categoria['descripcion']) ?></textarea>
             </div>
             <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="estado" name="estado"
-                       <?= (($_POST['estado'] ?? $categoria['estado']) == 1) ? 'checked' : '' ?>>
+                <input type="checkbox" class="form-check-input" id="estado" name="estado" <?= (($_POST['estado'] ?? $categoria['estado']) == 1) ? 'checked' : '' ?>>
                 <label for="estado" class="form-check-label">Categoría activa</label>
             </div>
             <button type="submit" class="btn btn-primary">
