@@ -31,23 +31,42 @@ Es el único usuario del sistema. Sus responsabilidades son:
 
 El sistema gestiona el catálogo de productos y sus movimientos de inventario (entradas y salidas). No incluye módulos de ventas, facturación, ni reportes avanzados. Está diseñado para funcionar en un servidor local (XAMPP) y ser operado por un usuario no técnico.
 
-**Trazabilidad con el caso:**
+**Requerimientos funcionales:**
 
-| Requerimiento del caso | Implementación | Evidencia |
-|---|---|---|
-| Iniciar sesión | `login.php` con sesiones y hash bcrypt | Funcional, probado |
-| Registrar productos | `productos/crear.php` | Formulario con validaciones JS+PHP |
-| Consultar listado | `productos/index.php` | Tabla responsiva con paginación |
-| Buscar productos | `productos/index.php` (LIKE) | Búsqueda por nombre, código, categoría |
-| Modificar productos | `productos/editar.php` | Edición de precio, descripción, categoría, stock |
-| Desactivar productos | `productos/desactivar.php` | Soft delete (estado = 0, no elimina) |
-| Registrar entradas/salidas | `movimientos/registrar.php` | Transacción PDO con commit/rollback |
-| Alerta stock bajo | `dashboard.php` + badges | Visible en panel y listado |
-| Código único | UNIQUE en SQL + validación PHP | Restricción en BD y servidor |
-| Stock no negativo | CHECK en SQL + validación PHP | Restricción en BD y servidor |
-| Salida no deja stock < 0 | Validación PHP antes de transacción | Bloquea si cantidad > stock_actual |
-| Desactivar no elimina | UPDATE estado, no DELETE | Producto queda en BD como inactivo |
-| Stock se actualiza solo | UPDATE automático en transacción | Tras cada movimiento válido |
+| RF | Descripción |
+|---|---|
+| RF-01 | Iniciar sesión con un usuario previamente registrado. |
+| RF-02 | Registrar productos con código, nombre, categoría, descripción, precio, stock actual y stock mínimo. |
+| RF-03 | Consultar el listado de productos. |
+| RF-04 | Buscar productos por nombre, código o categoría. |
+| RF-05 | Modificar el precio, la descripción, la categoría y las cantidades de un producto. |
+| RF-06 | Desactivar productos que ya no se comercializan. |
+| RF-07 | Registrar entradas y salidas de existencias. |
+| RF-08 | Mostrar una alerta cuando el stock actual sea menor que el stock mínimo. |
+
+**Matriz de trazabilidad (RF → archivo → caso de prueba):**
+
+| RF | Archivo que lo implementa | Caso de prueba | Verificación |
+|---|---|---|---|
+| RF-01 | `login.php` | CP-01 a CP-05 | Login correcto, clave incorrecta, campos vacíos |
+| RF-02 | `productos/crear.php` | CP-06 a CP-11 | Crear válido, código duplicado, negativos, campos cortos |
+| RF-03 | `productos/index.php` | CP-30, CP-34 | Listado completo, filtro por estado |
+| RF-04 | `productos/index.php` | CP-30 a CP-34 | Búsqueda por nombre, código, categoría, sin resultados |
+| RF-05 | `productos/editar.php` | CP-12 a CP-15 | Editar precio, stock, categoría; código inmutable |
+| RF-06 | `productos/desactivar.php` | CP-16 a CP-18 | Desactivar (soft delete), reactivar, confirmación |
+| RF-07 | `movimientos/registrar.php` | CP-19 a CP-26 | Entrada, salida, cantidad 0, salida > stock, concurrencia |
+| RF-08 | `dashboard.php` + `productos/index.php` | CP-27 a CP-29 | Stock bajo mínimo, stock 0, stock suficiente |
+
+**Reglas de negocio y su implementación:**
+
+| # | Regla | Implementación técnica | Caso de prueba |
+|---|---|---|---|
+| RN-1 | El código no puede repetirse | UNIQUE en SQL + validación PHP en `crear.php` | CP-07 |
+| RN-2 | No negativos (precio, stock, cantidad) | CHECK en SQL + `filter_var` en PHP | CP-08, CP-09, CP-21 |
+| RN-3 | Movimiento registra fecha, tipo, cantidad, producto, usuario | Campos NOT NULL + FK en `movimiento` | CP-19, CP-23 |
+| RN-4 | Salida no deja stock bajo cero | `FOR UPDATE` + validación PHP en `registrar.php` | CP-25, CP-26 |
+| RN-5 | Desactivar no elimina | `UPDATE estado = 0` (soft delete) en `desactivar.php` | CP-16 |
+| RN-6 | Stock se actualiza automático | `UPDATE stock_actual = stock_actual +/- ?` en transacción | CP-19, CP-23 |
 
 ---
 

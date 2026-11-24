@@ -47,7 +47,7 @@ CREATE TABLE producto (
     estado        TINYINT(1) NOT NULL DEFAULT 1,
     id_categoria  INT NOT NULL,
     CONSTRAINT fk_producto_categoria
-        FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria),
+        FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria) ON DELETE RESTRICT,
     CONSTRAINT chk_precio_positivo
         CHECK (precio >= 0),
     CONSTRAINT chk_stock_actual_positivo
@@ -68,9 +68,9 @@ CREATE TABLE movimiento (
     id_producto    INT NOT NULL,
     id_usuario     INT NOT NULL,
     CONSTRAINT fk_mov_producto
-        FOREIGN KEY (id_producto) REFERENCES producto(id_producto),
+        FOREIGN KEY (id_producto) REFERENCES producto(id_producto) ON DELETE RESTRICT,
     CONSTRAINT fk_mov_usuario
-        FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario),
+        FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE RESTRICT,
     CONSTRAINT chk_cantidad_positiva
         CHECK (cantidad > 0)
 ) ENGINE = InnoDB;
@@ -120,6 +120,7 @@ INSERT INTO movimiento (fecha_hora, tipo, cantidad, observacion, id_producto, id
 ('2026-11-03 14:15:00', 'salida',  5,  'Venta mostrador',            1, 1),
 ('2026-11-02 10:00:00', 'entrada', 10, 'Reposición stock',           4, 1),
 ('2026-11-05 16:45:00', 'salida',  7,  'Venta online',               4, 1),
+('2026-11-07 08:00:00', 'entrada', 10, 'Compra inicial proveedor',   9, 1),
 ('2026-11-08 11:20:00', 'salida',  10, 'Venta a cliente corporativo', 9, 1);
 
 -- =====================================================================

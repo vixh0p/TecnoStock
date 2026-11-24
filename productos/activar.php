@@ -1,15 +1,23 @@
 <?php
 /**
  * Reactivar un producto previamente desactivado.
+ * Acepta solo POST con token CSRF (evita CSRF y cambios por enlace GET).
  */
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/functions.php';
 requerirLogin();
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    setFlash('error', 'Acción no permitida.');
+    redirigir('index.php');
+}
+
+verificarCsrf();
+
 $pdo = getConexion();
 
-$id = (int)($_GET['id'] ?? 0);
+$id = (int)($_POST['id'] ?? 0);
 if ($id <= 0) {
     setFlash('error', 'ID de producto no válido');
     redirigir('index.php');
@@ -29,7 +37,8 @@ try {
     $stmt->execute([$id]);
     setFlash('success', 'Producto "' . $producto['nombre'] . '" reactivado.');
 } catch (PDOException $ex) {
-    setFlash('error', 'Error al reactivar: ' . $ex->getMessage());
+    error_log('Error al reactivar producto: ' . $ex->getMessage());
+    setFlash('error', 'Ocurrió un error al reactivar el producto.');
 }
 
 redirigir('index.php');

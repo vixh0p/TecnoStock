@@ -17,6 +17,7 @@ if (isset($_SESSION['usuario_id'])) {
 $errores = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    verificarCsrf();
     $correo = limpiar($_POST['correo'] ?? '');
     $clave  = $_POST['clave'] ?? '';
 
@@ -36,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $usuario = $stmt->fetch();
 
             if ($usuario && $usuario['estado'] == 1 && password_verify($clave, $usuario['clave'])) {
+                session_regenerate_id(true);
                 $_SESSION['usuario_id']     = $usuario['id_usuario'];
                 $_SESSION['usuario_nombre'] = $usuario['nombre'];
                 setFlash('success', 'Bienvenido/a, ' . $usuario['nombre']);
@@ -44,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $errores[] = 'Correo o clave incorrectos';
             }
         } catch (PDOException $ex) {
+            error_log('Error de conexión en login: ' . $ex->getMessage());
             $errores[] = 'Error al conectar. Verifique que MySQL esté activo en XAMPP.';
         }
     }
@@ -82,6 +85,7 @@ $basePath = '';
         <?php endif; ?>
 
         <form id="formLogin" method="POST" action="login.php" novalidate>
+            <?= campoCsrf() ?>
             <div class="mb-3">
                 <label for="correo" class="form-label">Correo electrónico</label>
                 <div class="input-group">
@@ -103,11 +107,11 @@ $basePath = '';
         </form>
 
         <hr class="my-4">
-        <div class="alert alert-info">
+        <div class="alert alert-warning border-warning">
             <small>
-                <strong>Credenciales de prueba:</strong><br>
-                Correo: admin@tecnostock.cl<br>
-                Clave: admin123
+                <strong>DEMO — Credenciales de prueba:</strong><br>
+                Correo: admin@tecnostock.cl · Clave: admin123<br>
+                <em>Solo para evaluación. Eliminar en producción.</em>
             </small>
         </div>
     </div>

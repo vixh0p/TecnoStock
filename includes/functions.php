@@ -63,6 +63,38 @@ function esEnteroNoNegativo($valor): bool
 }
 
 /**
+ * Genera o recupera un token CSRF de la sesión.
+ */
+function csrfToken(): string
+{
+    iniciarSesion();
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+/**
+ * Verifica el token CSRF enviado por POST. Si no coincide, detiene la ejecución.
+ */
+function verificarCsrf(): void
+{
+    iniciarSesion();
+    $token = $_POST['csrf_token'] ?? '';
+    if (!hash_equals($_SESSION['csrf_token'] ?? '', $token)) {
+        die('Token CSRF inválido. Recargue la página e intente nuevamente.');
+    }
+}
+
+/**
+ * Devuelve el campo oculto HTML con el token CSRF.
+ */
+function campoCsrf(): string
+{
+    return '<input type="hidden" name="csrf_token" value="' . csrfToken() . '">';
+}
+
+/**
  * Formatea un precio en pesos chilenos.
  */
 function formatoPrecio(float $valor): string

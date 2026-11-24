@@ -11,6 +11,7 @@ $pdo = getConexion();
 $errores = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    verificarCsrf();
     $nombre      = limpiar($_POST['nombre'] ?? '');
     $descripcion = limpiar($_POST['descripcion'] ?? '');
 
@@ -35,7 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             setFlash('success', 'Categoría "' . $nombre . '" creada correctamente');
             redirigir('index.php');
         } catch (PDOException $ex) {
-            $errores['general'] = 'Error al guardar: ' . $ex->getMessage();
+            error_log('Error al guardar categoría: ' . $ex->getMessage());
+            $errores['general'] = 'Ocurrió un error al guardar la categoría. Intente nuevamente.';
         }
     }
 }
@@ -60,6 +62,7 @@ include __DIR__ . '/../includes/header.php';
         <?php endif; ?>
 
         <form id="formCategoria" method="POST" novalidate>
+            <?= campoCsrf() ?>
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
                 <input type="text" class="form-control <?= isset($errores['nombre']) ? 'is-invalid' : '' ?>"

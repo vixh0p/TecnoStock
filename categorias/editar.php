@@ -27,6 +27,7 @@ if (!$categoria) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    verificarCsrf();
     $nombre      = limpiar($_POST['nombre'] ?? '');
     $descripcion = limpiar($_POST['descripcion'] ?? '');
     $estado      = isset($_POST['estado']) ? 1 : 0;
@@ -52,7 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             setFlash('success', 'Categoría actualizada correctamente');
             redirigir('index.php');
         } catch (PDOException $ex) {
-            $errores['general'] = 'Error al actualizar: ' . $ex->getMessage();
+            error_log('Error al actualizar categoría: ' . $ex->getMessage());
+            $errores['general'] = 'Ocurrió un error al actualizar la categoría. Intente nuevamente.';
         }
     }
 }
@@ -77,6 +79,7 @@ include __DIR__ . '/../includes/header.php';
         <?php endif; ?>
 
         <form id="formCategoria" method="POST" novalidate>
+            <?= campoCsrf() ?>
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
                 <input type="text" class="form-control <?= isset($errores['nombre']) ? 'is-invalid' : '' ?>" id="nombre" name="nombre" value="<?= e($_POST['nombre'] ?? $categoria['nombre']) ?>" placeholder="Ej: Cables y Adaptadores" required>

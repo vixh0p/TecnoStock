@@ -32,12 +32,13 @@ if (!$producto) {
 $categorias = $pdo->query('SELECT id_categoria, nombre FROM categoria WHERE estado = 1 ORDER BY nombre')->fetchAll();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    verificarCsrf();
     $nombre       = limpiar($_POST['nombre'] ?? '');
     $idCategoria  = (int)($_POST['id_categoria'] ?? 0);
     $descripcion  = limpiar($_POST['descripcion'] ?? '');
-    $precio       = (float)($_POST['precio'] ?? -1);
-    $stockActual  = (int)($_POST['stock_actual'] ?? -1);
-    $stockMinimo  = (int)($_POST['stock_minimo'] ?? -1);
+    $precio       = filter_var($_POST['precio'] ?? '', FILTER_VALIDATE_FLOAT);
+    $stockActual  = filter_var($_POST['stock_actual'] ?? '', FILTER_VALIDATE_INT);
+    $stockMinimo  = filter_var($_POST['stock_minimo'] ?? '', FILTER_VALIDATE_INT);
 
     // --- Validaciones servidor ---
     if (mb_strlen($nombre) < 3) {
@@ -46,13 +47,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($idCategoria <= 0) {
         $errores['id_categoria'] = 'Seleccione una categoría';
     }
-    if ($precio < 0) {
+    if ($precio === false || $precio < 0) {
         $errores['precio'] = 'El precio debe ser un número no negativo';
     }
-    if ($stockActual < 0) {
+    if ($stockActual === false || $stockActual < 0) {
         $errores['stock_actual'] = 'El stock actual debe ser un entero no negativo';
     }
-    if ($stockMinimo < 0) {
+    if ($stockMinimo === false || $stockMinimo < 0) {
         $errores['stock_minimo'] = 'El stock mínimo debe ser un entero no negativo';
     }
 
@@ -67,7 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             setFlash('success', 'Producto actualizado correctamente');
             redirigir('index.php');
         } catch (PDOException $ex) {
-            $errores['general'] = 'Error al actualizar: ' . $ex->getMessage();
+            error_log('Error al actualizar producto: ' . $ex->getMessage());
+            $errores['general'] = 'Ocurrió un error al actualizar el producto. Intente nuevamente.';
         }
     }
 }
@@ -97,6 +99,7 @@ include __DIR__ . '/../includes/header.php';
         <?php endif; ?>
 
         <form id="formProducto" method="POST" novalidate>
+            <?= campoCsrf() ?>
             <div class="row g-3">
                 <div class="col-md-6">
                     <label for="nombre" class="form-label">Nombre <span class="text-danger">*</span></label>

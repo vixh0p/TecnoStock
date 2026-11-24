@@ -133,13 +133,17 @@ include __DIR__ . '/../includes/header.php';
                     <a href="editar.php?id=<?= $p['id_producto'] ?>" class="btn btn-sm btn-outline-warning"
                        title="Editar"><i class="bi bi-pencil"></i></a>
                     <?php if ($p['estado'] == 1): ?>
-                    <a href="desactivar.php?id=<?= $p['id_producto'] ?>" class="btn btn-sm btn-outline-danger confirmar-accion"
-                       data-mensaje="¿Desactivar el producto <?= e($p['nombre']) ?>? No se eliminará físicamente."
-                       title="Desactivar"><i class="bi bi-toggle-on"></i></a>
+                    <form method="POST" action="desactivar.php" class="d-inline" onsubmit="return confirm('¿Desactivar el producto <?= e($p['nombre']) ?>? No se eliminará físicamente.')">
+                        <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
+                        <input type="hidden" name="id" value="<?= $p['id_producto'] ?>">
+                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Desactivar"><i class="bi bi-toggle-on"></i></button>
+                    </form>
                     <?php else: ?>
-                    <a href="activar.php?id=<?= $p['id_producto'] ?>" class="btn btn-sm btn-outline-success confirmar-accion"
-                       data-mensaje="¿Reactivar el producto <?= e($p['nombre']) ?>?"
-                       title="Activar"><i class="bi bi-toggle-off"></i></a>
+                    <form method="POST" action="activar.php" class="d-inline" onsubmit="return confirm('¿Reactivar el producto <?= e($p['nombre']) ?>?')">
+                        <input type="hidden" name="csrf_token" value="<?= csrfToken() ?>">
+                        <input type="hidden" name="id" value="<?= $p['id_producto'] ?>">
+                        <button type="submit" class="btn btn-sm btn-outline-success" title="Activar"><i class="bi bi-toggle-off"></i></button>
+                    </form>
                     <?php endif; ?>
                 </td>
             </tr>

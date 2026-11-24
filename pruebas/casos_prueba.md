@@ -86,7 +86,8 @@ Cada caso indica datos de entrada, resultado esperado y resultado obtenido.
 | CP-35 | Inyección SQL en búsqueda | "'; DROP TABLE producto; --" | No afecta la BD (PDO + prepared statements) | ✅ Sin efecto |
 | CP-36 | XSS en campo nombre | `<script>alert('xss')</script>` | Texto escapado, no se ejecuta | ✅ Escapado con htmlspecialchars |
 | CP-37 | Acceso sin login | URL directa a productos/index.php | Redirige a login | ✅ Redirigido |
-| CP-38 | Transacción rollback en error | Simular error en medio de transacción | Stock no se modifica, movimiento no se inserta | ✅ Rollback correcto |
+| CP-38 | Transacción rollback en error | Forzar INSERT con FK inexistente dentro de `beginTransaction()`. El `rollBack()` revierte el stock y el movimiento | Stock no se modifica, movimiento no se inserta | ✅ Rollback correcto |
+| CP-43 | Concurrencia en salida de stock | Dos peticiones simultáneas de salida de 5 unidades sobre producto con stock 10. Con `FOR UPDATE` la segunda espera y lee stock actualizado | Stock final = 0 (no -5 ni 5 inconsistente) | ✅ Atomicidad correcta |
 
 ## 10. Pruebas de categorías
 
@@ -103,11 +104,26 @@ Cada caso indica datos de entrada, resultado esperado y resultado obtenido.
 
 | Tipo de prueba | Casos | Aprobados |
 |---|---|---|
-| Flujos normales | CP-01, CP-06, CP-12-14, CP-19-20, CP-23, CP-30-32, CP-39 | 11/11 |
+| Flujos normales | CP-01, CP-06, CP-12-14, CP-19-20, CP-23, CP-27-32, CP-39, CP-41 | 17/17 |
 | Casos de error | CP-02-05, CP-07-11, CP-21-22, CP-25, CP-33, CP-40 | 14/14 |
-| Casos límite | CP-24, CP-25-26, CP-28, CP-34 | 6/6 |
-| Integridad/seguridad | CP-35-38 | 4/4 |
-| **Total** | **42 casos** | **42/42 (100%)** |
+| Casos límite | CP-15-18, CP-24, CP-26, CP-34 | 7/7 |
+| Integridad/seguridad | CP-35-38, CP-43 | 5/5 |
+| **Total** | **43 casos** | **43/43 (100%)** |
+
+## Evidencia de ejecución
+
+Las pruebas se ejecutaron con el sistema corriendo en XAMPP (Apache + MySQL). La verificación se hizo mediante peticiones HTTP a `http://localhost/TecnoStock/`:
+
+- **Login**: POST a `login.php` devuelve 302 (redirección al dashboard) con credenciales correctas; devuelve 200 con mensaje de error con credenciales incorrectas.
+- **Dashboard**: GET a `dashboard.php` con sesión activa devuelve 200 y contenido "Panel de Control" + alertas de stock.
+- **Crear producto**: POST a `productos/crear.php` con datos válidos redirige al listado; con código duplicado muestra error.
+- **Movimientos**: POST a `movimientos/registrar.php` con entrada válida actualiza el stock; con salida mayor al stock disponible muestra error.
+- **CSRF**: POST sin `csrf_token` detiene la ejecución con mensaje "Token CSRF inválido".
+- **Desactivar**: POST a `desactivar.php` cambia estado a 0 (no elimina); GET devuelve "Acción no permitida".
+
+Para reproducir: importar `tecnostock.sql` en phpMyAdmin, acceder a `http://localhost/TecnoStock/` y seguir los pasos de cada caso.
+
+---
 
 ## Datos de prueba utilizados
 
@@ -115,7 +131,7 @@ Los datos de prueba se cargan automáticamente al importar `tecnostock.sql`:
 - 1 usuario administrador
 - 5 categorías
 - 10 productos (incluyendo casos con stock bajo)
-- 5 movimientos de ejemplo
+- 6 movimientos de ejemplo
 
 Productos con stock bajo para validar alertas:
 - AU-CB-002 (Audífonos con cable): stock 3, mínimo 6
