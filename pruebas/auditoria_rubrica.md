@@ -62,6 +62,6 @@ respuesta HTTP o captura). Lo no ejecutado queda como **No verificado**.
 ## Historial
 
 - 2026-11-25: auditoría inicial estática → hallazgos F1–F5.
-- 2026-11-25: corregidos F1 (enlace de repositorio; video pendiente), F2 (commit), F3 (`e2e.php`
-  40/40 y evidencia real), F4 (encabezado del `.sql` y paso de `seed.php`); F5 queda como
-  observación de diseño justificada por RF-05.
+- 2026-11-25: corregidos F1 (enlace de repositorio; video pendiente), F2 (commit `af06757`
+  publicado en `origin/main`), F3 (`e2e.php` 40/40 y evidencia real), F4 (encabezado del `.sql`
+  y paso de `seed.php`); F5 queda como observación de diseño justificada por RF-05.
