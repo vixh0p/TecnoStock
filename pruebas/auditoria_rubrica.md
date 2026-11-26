@@ -15,7 +15,7 @@ respuesta HTTP o captura). Lo no ejecutado queda como **No verificado**.
 | G1 Arranca | Cumple | `http://localhost/TecnoStock/` responde 200 con Apache + MariaDB activos |
 | G2 Login | Cumple | `admin@tecnostock.cl`/`admin123` → 302 a dashboard; clave mala → error |
 | G3 Flujo completo | Cumple | `e2e.php`: crear → listar → buscar → editar → desactivar → entrada → salida → alerta |
-| G4 BD reconstruible | Cumple | `mysql -u root < database/tecnostock.sql` sin errores; 10 productos, 6 movimientos |
+| G4 BD reconstruible | Cumple | `mysql --default-character-set=utf8mb4 < database/tecnostock.sql` sin errores; 10 productos, 6 movimientos, tildes correctas |
 | G5 Seis reglas de negocio | Cumple | Código único, no negativos, movimiento completo, salida ≤ stock, soft delete, stock automático (e2e + SQL) |
 | G6 CSRF + PDO | Cumple | POST sin token bloqueado; `verificarCsrf()` en cada mutación; `prepare()` con `?` |
 | G7 Coherencia docs/código | Cumple | README, casos y script alineados tras corregir el encabezado del `.sql` y el paso de `seed.php` |
@@ -27,7 +27,7 @@ respuesta HTTP o captura). Lo no ejecutado queda como **No verificado**.
 | 1. Análisis y requerimientos | 15 | Cumple | README: alcance, actor, RF-01…RF-08, RN-1…RN-6, matriz RF→archivo→CP | — |
 | 2. Base de datos e integridad | 25 | Cumple | 4 tablas, PK/FK/UNIQUE/CHECK/índices, InnoDB/utf8mb4, script reconstruible, stock íntegro | — |
 | 3. Funcionalidades del MVP | 30 | Cumple | 40/40 verificaciones HTTP + BD (`pruebas/e2e.php`) | — |
-| 4. Interfaz y validaciones | 10 | Cumple (estático) | Bootstrap 5.3.3, `is-invalid`/`invalid-feedback`, validación JS y PHP, confirmaciones | Falta revisión visual a 360 px / 1280 px |
+| 4. Interfaz y validaciones | 10 | Cumple (800 px) | Bootstrap 5.3.3, navbar colapsable, cards y tablas responsive sin overflow horizontal, `is-invalid`/`invalid-feedback`, validación JS y PHP, confirmaciones | Revisión a 360 px no verificable con el navegador de la app |
 | 5. Pruebas y calidad | 10 | Cumple | `e2e.php` reproducible, CP-01…CP-43, PDO preparado, `error_log`, historial Git | — |
 | 6. Video explicativo | 10 | No verificado | `pruebas/guion_video.md` (4:45) listo | Falta grabar y pegar el enlace en el README |
 
