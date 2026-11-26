@@ -112,16 +112,30 @@ Cada caso indica datos de entrada, resultado esperado y resultado obtenido.
 
 ## Evidencia de ejecución
 
-Las pruebas se ejecutaron con el sistema corriendo en XAMPP (Apache + MySQL). La verificación se hizo mediante peticiones HTTP a `http://localhost/TecnoStock/`:
+Ejecución verificada el **2026-11-25** sobre XAMPP (Apache 2.4 + MariaDB 10.4), con la base
+importada desde `database/tecnostock.sql`.
 
-- **Login**: POST a `login.php` devuelve 302 (redirección al dashboard) con credenciales correctas; devuelve 200 con mensaje de error con credenciales incorrectas.
-- **Dashboard**: GET a `dashboard.php` con sesión activa devuelve 200 y contenido "Panel de Control" + alertas de stock.
-- **Crear producto**: POST a `productos/crear.php` con datos válidos redirige al listado; con código duplicado muestra error.
-- **Movimientos**: POST a `movimientos/registrar.php` con entrada válida actualiza el stock; con salida mayor al stock disponible muestra error.
-- **CSRF**: POST sin `csrf_token` detiene la ejecución con mensaje "Token CSRF inválido".
-- **Desactivar**: POST a `desactivar.php` cambia estado a 0 (no elimina); GET devuelve "Acción no permitida".
+### Prueba automatizada (reproducible)
 
-Para reproducir: importar `tecnostock.sql` en phpMyAdmin, acceder a `http://localhost/TecnoStock/` y seguir los pasos de cada caso.
+```powershell
+C:\xampp\php\php.exe pruebas\e2e.php
+```
+
+Resultado de la última ejecución: **40 PASS / 0 FAIL**. El script valida por HTTP y contra la
+base de datos: login correcto e incorrecto, bloqueo CSRF, crear/listar/buscar/editar/desactivar/
+reactivar, entrada y salida con actualización de stock, salida mayor al stock, cantidad 0,
+alerta de stock bajo y búsquedas por categoría y sin resultados. Limpia sus propios datos
+(E2E-001/E2E-002) al inicio y al final.
+
+### Verificación manual complementaria
+
+- **Login**: POST a `login.php` devuelve 302 al dashboard con credenciales correctas y 200 con
+  "Correo o clave incorrectos" con clave mala.
+- **Dashboard**: GET con sesión activa devuelve 200 con "Panel de Control" y alertas de stock.
+- **Desactivar**: POST cambia `estado` a 0 (no elimina); GET redirige con "Acción no permitida".
+
+Para reproducir: importar `tecnostock.sql` en phpMyAdmin, acceder a `http://localhost/TecnoStock/`
+y ejecutar `pruebas/e2e.php`.
 
 ---
 

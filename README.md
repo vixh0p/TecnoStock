@@ -4,6 +4,9 @@ Sistema web de gestión de inventario para el emprendimiento TecnoStock.
 Permite administrar productos, categorías y movimientos de stock (entradas/salidas)
 con alertas de stock bajo. Desarrollado con PHP 8 + PDO, MySQL y Bootstrap 5.
 
+**Repositorio:** https://github.com/vixh0p/TecnoStock
+**Video explicativo:** _(pendiente: agregar el enlace público, máximo 5 minutos)_
+
 ## Tabla de contenidos
 1. [Requisitos](#requisitos)
 2. [Instalación](#instalación)
@@ -92,9 +95,8 @@ El sistema gestiona el catálogo de productos y sus movimientos de inventario (e
    - Abrir phpMyAdmin: `http://localhost/phpmyadmin`
    - Pestaña "Importar" → seleccionar `database/tecnostock.sql` → Ejecutar
 
-4. **Crear el usuario administrador**:
-   - Abrir en el navegador: `http://localhost/TecnoStock/database/seed.php`
-   - Esto crea el usuario con hash bcrypt correcto.
+4. **Usuario administrador**: el script SQL ya lo incluye (hash bcrypt de `admin123`).
+   Solo si necesitas regenerar el hash, abre `http://localhost/TecnoStock/database/seed.php`.
 
 5. **Acceder al sistema**:
    - URL: `http://localhost/TecnoStock/`
@@ -132,6 +134,11 @@ TecnoStock/
 ├── movimientos/
 │   ├── index.php              Listado de movimientos
 │   └── registrar.php          Registrar entrada/salida de stock
+├── pruebas/
+│   ├── casos_prueba.md        Casos de prueba (CP-01 a CP-43)
+│   ├── e2e.php                Prueba automatizada end-to-end
+│   ├── guion_video.md         Guion del video explicativo
+│   └── auditoria_rubrica.md   Auditoría de cumplimiento de la rúbrica
 ├── index.php                  Punto de entrada (redirige a login)
 ├── login.php                  Inicio de sesión
 ├── logout.php                 Cierre de sesión
@@ -177,3 +184,19 @@ TecnoStock/
 
 Ver archivo `pruebas/casos_prueba.md` con la documentación completa de pruebas
 de flujos normales, errores y casos límite.
+
+### Prueba automatizada
+
+Con Apache y MySQL activos y la base importada:
+
+```powershell
+C:\xampp\php\php.exe pruebas\e2e.php
+```
+
+Ejecuta 40 verificaciones por HTTP y SQL (login, CSRF, CRUD, movimientos, alertas y búsqueda)
+y limpia sus propios datos de prueba.
+
+### Auditoría de rúbrica
+
+`pruebas/auditoria_rubrica.md` registra el estado de cada criterio, las puertas de entrega y
+las brechas pendientes antes de entregar.

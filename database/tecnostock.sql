@@ -1,7 +1,7 @@
 -- =====================================================================
 -- TecnoStock - Sistema de Inventario
 -- Script de creación de base de datos
--- Motor: MySQL 8.x (compatible con MariaDB 10.x de XAMPP)
+-- Motor: MariaDB 10.4 (XAMPP); compatible con MySQL 8.x
 -- Ejecutar desde phpMyAdmin o consola MySQL
 -- =====================================================================
 
